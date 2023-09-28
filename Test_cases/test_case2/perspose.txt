@@ -1,0 +1,1 @@
+test if 'is_compatible_type' function works correctly

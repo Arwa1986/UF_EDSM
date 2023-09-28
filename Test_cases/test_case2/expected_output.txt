@@ -1,0 +1,44 @@
+/home/arwa/PycharmProjects/EDSMlearner/env/bin/python /home/arwa/PycharmProjects/UF_EDSM-master/test.py
+start
+1 2 a
+1 2 x
+2 4 c
+1 3 b
+5 7 a
+7 8 c
+7 9 d
+5 11 c
+6 10 b
+done
+Set with representative 1: [1, 5, 6]
+Set with representative 2: [2, 7]
+Set with representative 3: [3, 10]
+Set with representative 4: [4, 8]
+Set with representative 9: [9]
+Set with representative 11: [11]
+1: accepted
+2: rejected
+4: accepted
+3: accepted
+5: rejected
+7: unlabeled
+8: rejected
+9: rejected
+11: unlabeled
+6: unlabeled
+10: accepted
+Set with representative 1: [1, 5, 6]
+compatible? = False, list type= unlabeled
+Set with representative 2: [2, 7]
+compatible? = True, list type= rejected
+Set with representative 3: [3, 10]
+compatible? = True, list type= accepted
+Set with representative 4: [4, 8]
+compatible? = False, list type= unlabeled
+Set with representative 9: [9]
+compatible? = True, list type= rejected
+Set with representative 11: [11]
+compatible? = True, list type= unlabeled
+
+Process finished with exit code 0
+

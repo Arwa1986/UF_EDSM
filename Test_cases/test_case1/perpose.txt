@@ -1,0 +1,7 @@
+This test aims to test the merge functions regardless of the state's type.
+it starts with and adjistant matrix to build a specific unconnected APTA.
+then it merge state 1 with 5
+and then 1 with 6
+ we test:
+ 1- states are divided into sets correctly.
+ 2- within each set, all states are merged correctly (no transition is lost).

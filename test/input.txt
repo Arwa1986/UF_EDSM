@@ -1,0 +1,7 @@
+Postive sequences
+A, B, C
+A, C, C
+A, A, B, C
+Negative sequences
+A, B, B, A
+A, C, B
