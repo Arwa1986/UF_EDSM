@@ -12,51 +12,57 @@ class FSM:
         red = self.apta.root
         self.apta.set_color(red, 'red')
         self.red_states = [red]
-        self.make_leaves_red()
-        # self.red_states = [0,2,3,5,8,10]
-        # for r in self.red_states:
-        #     self.apta.set_color(r, 'red')
-        # print(f'first RED: {red}')
+        # self.make_leaves_red()
+        self.found_blue=False
+        self.visited=[]
+        self.blue_states=[]
 
     def run_EDSM_learner(self):
         if self.apta.is_all_states_red():
             return
 
-        blue = self.pick_random_state()
-        # blue = 4
-        print(f'BLUE: {blue}')
-
+        # blue = self.pick_random_state()
+        self.found_blue = False
+        self.blue_states = []
+        self.visited = []
+        self.pick_next_blue2(self.apta.root)
+        print(f'BLUE_STATES: {self.blue_states}')
+        self.draw()
         # mergable_states is  a list contains all pairs of state that are valid to be merged with their merging scour
         mergable_states=[]
-
+        # blue=-1
         valid_for_at_least_one_red = False
-        for red in self.red_states:
-            print(f'RED: {red}')
-            # Create a new disjoint set data structure
-            ds = DisjointSet()
-            ds.s1 = red
-            ds.s2 = blue
-            self.make_set_for_every_state_rooted_at(ds, red)
-            self.make_set_for_every_state_rooted_at(ds, blue)
-            # self.compute_classes(ds, red, blue)
-            have_shared_transition, shared_labels = self.have_shared_outgoing_transition(red, blue)
-            work_to_do = {}
-            if have_shared_transition:
-                add_new_state = ds.union(red, blue)
-                work_to_do[ds.find(red)] = ds.get_set(red)
-                if add_new_state:
-                    self.compute_classes2(ds,work_to_do)
+        for blue in self.blue_states:
+            print(f'BLUE: {blue}')
+            for red in self.red_states:
+                print(f'RED: {red}')
+                # Create a new disjoint set data structure
+                ds = DisjointSet()
+                ds.s1 = red
+                ds.s2 = blue
+                self.make_set_for_every_state_rooted_at(ds, red)
+                self.make_set_for_every_state_rooted_at(ds, blue)
+                # self.compute_classes(ds, red, blue)
+                have_shared_transition, shared_labels = self.have_shared_outgoing_transition(red, blue)
+                work_to_do = {}
+                if have_shared_transition:
+                    add_new_state = ds.union(red, blue)
+                    work_to_do[ds.find(red)] = ds.get_set(red)
+                    if add_new_state:
+                        self.compute_classes2(ds,work_to_do)
 
-            if self.is_valid_merge(ds):
-                merging_scour = self.compute_scour(ds)
-                ds.merging_scour = merging_scour
-                mergable_states.append(ds)
-                if merging_scour > 0:
-                    ds.print()
-                    valid_for_at_least_one_red = True
-                print(f'merging scour for {red} & {blue}: {merging_scour}')
-            else:
-                ds.merging_scour = -1
+                if self.is_valid_merge(ds):
+                    merging_scour = self.compute_scour(ds)
+                    ds.merging_scour = merging_scour
+                    mergable_states.append(ds)
+                    if merging_scour > 0:
+                        # ds.print()
+                        valid_for_at_least_one_red = True
+                    print(f'merging scour for {red} & {blue}: {merging_scour}')
+                else:
+                    ds.merging_scour = -1
+                    # ds.print()
+
         if not valid_for_at_least_one_red:
              # the blue_state can't be merged with any red_state
             print(f'{blue} cannot be merged with any red_state')
@@ -68,8 +74,47 @@ class FSM:
             print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
             self.merge_sets(ds_with_highest_scour)
             self.draw()
+
         self.update_red_states()
         self.run_EDSM_learner()
+
+    def pick_next_blue(self):
+        for red in self.red_states:
+            if not self.apta.is_leaf(red):
+                # Get a list of all nodes (states) in the graph
+                all_states = self.apta.get_children(red)
+                # Exclude red states
+                non_red_states = [s for s in all_states if self.apta.G.nodes[s].get('fillcolor') != 'red']
+                for non_red in non_red_states:
+                    self.apta.set_color(non_red, 'blue')
+                self.draw()
+                if non_red_states:
+                    return non_red_states
+    def pick_next_blue2(self, red):
+            if self.found_blue:
+                return
+            if red in self.red_states:
+                self.visited.append(red)
+                # Get a list of all nodes (states) in the graph
+                all_states = self.apta.get_children(red)
+                # Exclude red states
+                self.blue_states = [s for s in all_states if self.apta.G.nodes[s].get('fillcolor') != 'red']
+                for non_red in self.blue_states:
+                    self.apta.set_color(non_red, 'blue')
+
+                # self.draw()
+                if self.blue_states:
+                    self.found_blue = True
+                    return
+                else:
+                    neighbors = self.apta.get_children(red)
+                    for vs in self.visited:
+                        if vs in neighbors:
+                            neighbors.remove(vs)
+                    if red in neighbors:
+                        neighbors.remove(red)
+                    for neighbor in neighbors:
+                        self.pick_next_blue2(neighbor)  # Recursive call to explore neighbors
 
     def make_leaves_red(self):
         for state in self.apta.G.nodes:
@@ -126,10 +171,10 @@ class FSM:
     def compute_scour(self, ds):
         merging_scour = 0
         states_before_merge = self.apta.G.number_of_nodes()
-        backup = copy.deepcopy(self.apta.G)
+        backup = copy.deepcopy(self.apta)
         self.merge_sets(ds)
         states_after_merge = self.apta.G.number_of_nodes()
-        self.apta.G = backup
+        self.apta = backup
         if states_before_merge != states_after_merge:
             merging_scour = states_before_merge - states_after_merge -1
         return merging_scour
@@ -138,15 +183,13 @@ class FSM:
         sets = ds.get_sets()
         for set in sets.items():
             represinitive, states = set
-            self.merge_states(represinitive, states)
+            if len(states)>1:
+                self.merge_states(represinitive, states)
 
-    def merge_states(self, representative, merge_list):
+    def merge_states(self, target, merge_list):
         list_type = self. get_list_type(merge_list)
-        red = representative
-        # for s in merge_list:
-        #     if self.apta.get_color(s) == 'red':
-        #         red = s
-        target = red
+        if any (self.apta.get_color(state) == 'red' for state in merge_list):
+            self.apta.set_color(target, 'red')
         merge_list.remove(target)
 
         for i in range(0, len(merge_list)):
@@ -180,12 +223,6 @@ class FSM:
             else:
                 self.apta.add_edge(target, e[1], temp_lbl)
 
-        # # set type for the target state
-        # s_type = self.apta.get_state_type(source)
-        # t_type = self.apta.get_state_type(target)
-
-        # self.AG.set_state_type(target, self.AG.the_winner_type(s_type, t_type))
-
     def is_in_target_out_edges(self, edge_tuple, edges_list):
         for e in edges_list:
             # if both edges have the same label
@@ -204,12 +241,6 @@ class FSM:
             if not self.apta.has_in_edge(target, e):
                 self.apta.add_edge(e[0], target, temp_lbl)
             self.apta.delete_edge(e)
-
-        # # set type for the target state
-        # s_type = self.AG.get_state_type(source)
-        # t_type = self.AG.get_state_type(target)
-        #
-        # self.AG.set_state_type(target, self.AG.the_winner_type(s_type, t_type))
 
     # is_compatible_type: boolean
     # return true is s1 and s2 of the same type or at least of them is unlabeled
@@ -275,11 +306,8 @@ class FSM:
         FSM.figure_num+=1
 
     def compute_classes2(self,ds ,work_to_do):
-        # if self.apta.is_leaf(red) or self.apta.is_leaf(blue):
-        #     return
         add_something_new = False
         go_agin = False
-        # work_to_do={}
         updated_work_to_do= work_to_do.copy()
         for represitative, set_to_merge in work_to_do.items():
             # set_to_merge is all states that need to merged together
@@ -298,25 +326,13 @@ class FSM:
                                 s2_target_state = other_state_out_trans[1]
                                 add_something_new = ds.union(s1_target_state, s2_target_state)
                                 updated_work_to_do[ds.find(s1_target_state)] = ds.get_set(s1_target_state)
-                                print(f'work_to_do: {work_to_do}')
+                                # print(f'work_to_do: {work_to_do}')
                                 if add_something_new:
                                     go_agin = True
 
         if go_agin:
             self.compute_classes2(ds, updated_work_to_do)
-            # first_ts = target_states[0]
-            # for ts in s2_target_state:
-            #     ds.union(first_ts, ts)
-            # if ds.find(red) == ds.find(first_ts):
-            #     return
-            # for shared_label in shared_labels:
-            #     blue_child = self.apta.get_child_nodes_with_label(blue, shared_label)
-            #     red_child = self.apta.get_child_nodes_with_label(red, shared_label)
-            #     ds.union(red_child,blue_child)
-            #     self.compute_classes(ds, red_child, blue_child)
-            #     if not ds.is_representative(red_child):
-            #         representative = ds.find(red_child)
-            #         self.compute_classes(ds, representative, blue_child)
+
 
     def get_other_state_out_transitions(self, state, set_to_merge):
         new_lst = set_to_merge.remove(state)
@@ -326,3 +342,76 @@ class FSM:
             for out_trans in s_out_trans:
                out_transitions.append(out_trans)
         return out_transitions
+
+    def merge_remaining_leaves(self):
+        leaves = []
+        for node in self.apta.G.nodes:
+            if self.apta.is_leaf(node):
+                leaves.append(node)
+        print(f'Leaves: {leaves}')
+        for leaf in leaves:
+            merged = False
+            print(f'leaf: {leaf}')
+            leaf_type = self.apta.get_state_type(leaf)
+            print(f'leaf_type: {leaf_type}')
+            siblings = self.apta.get_siblings(leaf)
+            print(f'try siblings: {siblings}')
+            for sib in siblings:
+                if self.apta.get_state_type(sib) == leaf_type:
+                    self.merge_states(sib, [sib, leaf])
+                    merged = True
+                    print(f'merged with: {sib}')
+                    break
+            if not merged:
+                # try to merge it with a parent
+                parent_nodes = list(self.apta.G.predecessors(leaf))
+                print(f'try parents: {parent_nodes}')
+                for parent in parent_nodes:
+                    print(f'parent: {parent}')
+                    compatible, _t = self.is_compatible_type([parent, leaf])
+                    if not compatible:
+                        continue
+                    elif self.apta.get_state_type(parent) == leaf_type:
+                        self.merge_states(parent, [parent, leaf])
+                        merged = True
+                        print(f'merged with: {parent}')
+                    else:
+                        merged = self.merge_if_sharing_incoming_transition(parent, leaf)
+                        print(f'merged with: {parent}')
+                    if merged:
+                        break
+            if not merged:
+                # try to merge it with any compatible state
+                # first: try states of the same type
+                # then: try unlabeled states with sharing incoming transition
+
+                # Get a list of all nodes (states) in the graph
+                all_states = self.apta.G.nodes
+                # filttering states to include just intranal states with the sae type of the leaf
+                same_type_states = [s for s in all_states if self.apta.get_state_type(s) == leaf_type and not self.apta.is_leaf(s)]
+                print(f'try any same type:{same_type_states}')
+                if same_type_states:
+                    self.merge_states(same_type_states[0], [same_type_states[0], leaf])
+                    merged = True
+                else:
+                    unlabeled_states = [s for s in all_states if
+                                        self.apta.get_state_type(s) == 'unlabeled' and not self.apta.is_leaf(s)]
+                    print(f'try any unlabeled: {unlabeled_states}')
+                    for unlabeled_s in unlabeled_states:
+                        merged = self.merge_if_sharing_incoming_transition(unlabeled_s, leaf)
+                        if merged:
+                            break
+
+    def merge_if_sharing_incoming_transition(self, state1, state2): # state1: an internal state, state2: a leaf
+        merged = False
+        s1_incoming_transitions = self.apta.get_in_edges(state1)
+        s2_incoming_transitions = self.apta.get_in_edges(state2)
+        for s2_inTrans in s2_incoming_transitions:
+            for s2_inTrans in s1_incoming_transitions:
+                if self.apta.get_edge_label(s2_inTrans) == self.apta.get_edge_label(s2_inTrans):
+                    self.merge_states(state1, [state1, state2])
+                    merged = True
+                    break
+            if merged:
+                break
+        return merged

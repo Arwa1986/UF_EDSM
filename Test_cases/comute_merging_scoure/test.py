@@ -4,7 +4,7 @@ from matrix_reader import read_matrix, draw
 
 
 G = read_matrix('test/computeclasses.adjlist')
-draw(G, "output/APTA.png")
+draw(G, "expected output/APTA.png")
 apta = APTA()
 apta.G = G
 # apta.G.nodes[5]['fillcolor'] = 'lightblue'

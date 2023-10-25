@@ -1,7 +1,7 @@
 from typing import List
 import networkx as nx
-import matplotlib.pyplot as plt
-from IPython.display import Image
+# import matplotlib.pyplot as plt
+# from IPython.display import Image
 from path import PATH
 
 class APTA:
@@ -271,6 +271,18 @@ class APTA:
         leaf_nodes = [node for node in self.G.nodes() if self.is_leaf(node) and self.get_state_type(node) == 'rejected']
         # print(f'leaves: {leaf_nodes}')
         self.G.remove_nodes_from(leaf_nodes)
+
+    # Function to get siblings of a node
+    def get_siblings(self, node):
+        parent_nodes = list(self.G.predecessors(node))  # Get parent nodes
+        siblings = []
+
+        for parent in parent_nodes:
+            siblings.extend(list(self.G.successors(parent)))  # Get children of each parent
+
+        siblings.remove(node)  # Remove the node itself if it's in the list (self-loop)
+
+        return siblings
 
     def draw_multiDigraph(self):
         # p = nx.drawing.nx_pydot.to_pydot(fsm.AG.G)
