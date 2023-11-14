@@ -21,28 +21,26 @@ class FSM:
         if self.apta.is_all_states_red():
             return
 
-        # blue = self.pick_random_state()
         self.found_blue = False
         self.blue_states = []
         self.visited = []
         self.pick_next_blue2(self.apta.root)
-        print(f'BLUE_STATES: {self.blue_states}')
+        # print(f'BLUE_STATES: {self.blue_states}')
         self.draw()
         # mergable_states is  a list contains all pairs of state that are valid to be merged with their merging scour
         mergable_states=[]
-        # blue=-1
+        blue=None
         valid_for_at_least_one_red = False
         for blue in self.blue_states:
-            print(f'BLUE: {blue}')
             for red in self.red_states:
-                print(f'RED: {red}')
+                # print(f'BLUE: {blue} - RED: {red}')
                 # Create a new disjoint set data structure
                 ds = DisjointSet()
                 ds.s1 = red
                 ds.s2 = blue
                 self.make_set_for_every_state_rooted_at(ds, red)
                 self.make_set_for_every_state_rooted_at(ds, blue)
-                # self.compute_classes(ds, red, blue)
+
                 have_shared_transition, shared_labels = self.have_shared_outgoing_transition(red, blue)
                 work_to_do = {}
                 if have_shared_transition:
@@ -58,20 +56,20 @@ class FSM:
                     if merging_scour > 0:
                         # ds.print()
                         valid_for_at_least_one_red = True
-                    print(f'merging scour for {red} & {blue}: {merging_scour}')
+                    # print(f'merging scour for {red} & {blue}: {merging_scour}')
                 else:
                     ds.merging_scour = -1
                     # ds.print()
 
         if not valid_for_at_least_one_red:
              # the blue_state can't be merged with any red_state
-            print(f'{blue} cannot be merged with any red_state')
+            # print(f'{blue} cannot be merged with any red_state')
             self.apta.set_color(blue, 'red') # make it red
             self.red_states.append(blue) #addit to red_states list
             self.draw()
         else:
             ds_with_highest_scour = self.pick_high_scour_pair(mergable_states)
-            print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
+            # print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
             self.merge_sets(ds_with_highest_scour)
             self.draw()
 
@@ -335,7 +333,8 @@ class FSM:
 
 
     def get_other_state_out_transitions(self, state, set_to_merge):
-        new_lst = set_to_merge.remove(state)
+        # new_lst = set_to_merge
+        # new_lst.remove(state)
         out_transitions=[]
         for s in set_to_merge:
             s_out_trans = self.apta.get_out_edges(s)

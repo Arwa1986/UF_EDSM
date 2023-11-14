@@ -49,14 +49,17 @@ class Evaluation:
             elif not result or lastStateType=="rejected":
                 true_negative += 1
 
-        print(f'Traces that were accepted by original and learned automata')
-        print(f'true psitive ={true_positive}')
-        print(f'Traces that were rejected by original but accepted by learned automata')
-        print(f'false positive = {false_positive}')
-        print(f'Traces that were rejected by original and learned automata')
-        print(f'true negative = {true_negative}')
-        print(f'Traces that were accepted by original but rejected learned automata')
-        print(f'false negative = {false_negative}')
+
+        # print(f'Traces that were accepted by original and learned automata')
+        # print(f'true psitive ={true_positive}')
+        # print(f'Traces that were rejected by original but accepted by learned automata')
+        # print(f'false positive = {false_positive}')
+        # print(f'Traces that were rejected by original and learned automata')
+        # print(f'true negative = {true_negative}')
+        # print(f'Traces that were accepted by original but rejected learned automata')
+        # print(f'false negative = {false_negative}')
+
+
         precision = true_positive/(true_positive+false_positive)
         recall = true_positive/(true_positive+false_negative)
         print(f'precision = {precision}')
@@ -66,9 +69,11 @@ class Evaluation:
 
         print(f'F_Measure = {F_measure}')
 
-        f = open("evaluation/evaluation.txt", "a")
-        f.write(f"{true_positive}\t{false_positive}\t"
-                f"{true_negative}\t{false_negative}\t{precision}\t{recall}\t"
-                f"{F_measure}\n")
-        f.close()
+        # f = open("evaluation/evaluation.txt", "a")
+        # f.write(f"{true_positive}\t{false_positive}\t"
+        #         f"{true_negative}\t{false_negative}\t{precision}\t{recall}\t"
+        #         f"{F_measure}\n")
+        # f.close()
+
+        return precision
 
