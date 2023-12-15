@@ -24,7 +24,7 @@ fsm.make_set_for_every_state_rooted_at(6)
 # union sets
 fsm.compute_classes(1,5)
 fsm.compute_classes(1,6)
-fsm.ds.print()
+fsm.ds.printSets()
 
 for s in fsm.apta.G.nodes:
     print(f'{s}: {apta.get_state_type(s)}')

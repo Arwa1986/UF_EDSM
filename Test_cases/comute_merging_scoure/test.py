@@ -24,6 +24,6 @@ fsm.make_set_for_every_state_rooted_at(6)
 # union sets
 fsm.compute_classes(1,5)
 fsm.compute_classes(1,6)
-fsm.ds.print()
+fsm.ds.printSets()
 
 print(f'merging scour for state 1, 5 and 6: {fsm.compute_scour()}')
