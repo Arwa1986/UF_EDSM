@@ -35,17 +35,17 @@ class Evaluation:
         for trace in self.positive_traces:
             # print(trace)
             result, lastStateType = self.is_trace_in_G(trace)
-            if result and (lastStateType == "accepted" or lastStateType=="unlabeled") :
+            if result and (lastStateType == "accepted" or lastStateType == "unlabeled") :
                 true_positive +=1
             else:
-                false_positive +=1
+                false_negative +=1
 
         for trace in self.negative_traces:
             # print(trace)
             # result = self.is_trace_in_G(trace)
             result, lastStateType = self.is_trace_in_G(trace)
             if result and (lastStateType == "accepted" or lastStateType == "unlabeled"):
-                false_negative += 1
+                false_positive += 1
             elif not result or lastStateType=="rejected":
                 true_negative += 1
 
@@ -66,8 +66,10 @@ class Evaluation:
         print(f'recall = {recall}')
 
         F_measure = (2*precision*recall)/(precision+recall)
-
         print(f'F_Measure = {F_measure}')
+
+        Accuracy = (true_positive + true_negative) / (len(self.positive_traces) + len(self.negative_traces))
+        print(f'Accuracy = {Accuracy}')
 
         # f = open("evaluation/evaluation.txt", "a")
         # f.write(f"{true_positive}\t{false_positive}\t"
