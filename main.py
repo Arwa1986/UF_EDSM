@@ -49,8 +49,8 @@ if __name__ == '__main__':
     clean_folder()
     k, accepted_traces, rejected_traces, BL, SP = import_input("input/PosNegExamples.txt")
     traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp = split_dataset(accepted_traces, rejected_traces)
-    # traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp  = import_input("input/traces.txt")
-
+    # # traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp  = import_input("input/traces.txt")
+    #
     write_to_file(traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp)
     print(f'..........Training.............')
     print(f'number of Positive Examples: {len(traningPosExmp)}')
@@ -58,7 +58,7 @@ if __name__ == '__main__':
     # building the tree
     apta = APTA()
     apta.build_APTA(traningPosExmp, trainingNegExmp)
-
+    # apta.build_APTA(accepted_traces, rejected_traces)
     fsm = FSM(apta)
     fsm.draw()
     fsm.run_EDSM_learner()
@@ -69,5 +69,6 @@ if __name__ == '__main__':
     print(f'number of Negative Examples: {len(evalNegExamp)}')
     eval = Evaluation(fsm, evalPosExmp, evalNegExamp)
     precision = eval.evaluate()
+    print(f'the root: {fsm.apta.root}')
 
 

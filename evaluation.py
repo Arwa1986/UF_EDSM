@@ -38,26 +38,26 @@ class Evaluation:
             if result and (lastStateType == "accepted" or lastStateType == "unlabeled") :
                 true_positive +=1
             else:
-                false_negative +=1
+                false_positive +=1
 
         for trace in self.negative_traces:
             # print(trace)
             # result = self.is_trace_in_G(trace)
             result, lastStateType = self.is_trace_in_G(trace)
             if result and (lastStateType == "accepted" or lastStateType == "unlabeled"):
-                false_positive += 1
+                false_negative += 1
             elif not result or lastStateType=="rejected":
                 true_negative += 1
 
 
-        # print(f'Traces that were accepted by original and learned automata')
-        # print(f'true psitive ={true_positive}')
-        # print(f'Traces that were rejected by original but accepted by learned automata')
-        # print(f'false positive = {false_positive}')
-        # print(f'Traces that were rejected by original and learned automata')
-        # print(f'true negative = {true_negative}')
-        # print(f'Traces that were accepted by original but rejected learned automata')
-        # print(f'false negative = {false_negative}')
+        print(f'Traces that were accepted by original and learned automata')
+        print(f'true psitive ={true_positive}')
+        print(f'Traces that were rejected by original but accepted by learned automata')
+        print(f'false positive = {false_positive}')
+        print(f'Traces that were rejected by original and learned automata')
+        print(f'true negative = {true_negative}')
+        print(f'Traces that were accepted by original but rejected learned automata')
+        print(f'false negative = {false_negative}')
 
 
         precision = true_positive/(true_positive+false_positive)
