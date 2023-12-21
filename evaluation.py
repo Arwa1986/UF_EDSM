@@ -32,32 +32,45 @@ class Evaluation:
         false_positive = 0
         true_negative = 0
         false_negative = 0
+
+        true_positive_lsit = []
+        false_positive_list = []
+        true_negative_list = []
+        false_negative_list = []
         for trace in self.positive_traces:
             # print(trace)
             result, lastStateType = self.is_trace_in_G(trace)
             if result and (lastStateType == "accepted" or lastStateType == "unlabeled") :
                 true_positive +=1
+                true_positive_lsit.append(trace)
             else:
-                false_positive +=1
+                false_negative +=1
+                false_negative_list.append(trace)
 
         for trace in self.negative_traces:
             # print(trace)
             # result = self.is_trace_in_G(trace)
             result, lastStateType = self.is_trace_in_G(trace)
             if result and (lastStateType == "accepted" or lastStateType == "unlabeled"):
-                false_negative += 1
+                false_positive += 1
+                false_positive_list.append(trace)
             elif not result or lastStateType=="rejected":
                 true_negative += 1
+                true_negative_list.append(trace)
 
 
         print(f'Traces that were accepted by original and learned automata')
         print(f'true psitive ={true_positive}')
+        self.print_lst(true_positive_lsit)
         print(f'Traces that were rejected by original but accepted by learned automata')
         print(f'false positive = {false_positive}')
+        self.print_lst(false_positive_list)
         print(f'Traces that were rejected by original and learned automata')
         print(f'true negative = {true_negative}')
+        self.print_lst(true_negative_list)
         print(f'Traces that were accepted by original but rejected learned automata')
         print(f'false negative = {false_negative}')
+        self.print_lst(false_negative_list)
 
 
         precision = true_positive/(true_positive+false_positive)
@@ -79,3 +92,6 @@ class Evaluation:
 
         return precision
 
+    def print_lst(self, lst):
+        for item in lst:
+            print(item)

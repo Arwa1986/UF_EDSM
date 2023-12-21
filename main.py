@@ -2,8 +2,8 @@ import random
 from APTA import APTA
 from FSM import FSM
 from evaluation import Evaluation
-from input_reader import import_input, clean_folder
-
+# from input_reader import import_input, clean_folder
+from input_reader2 import *
 def split_dataset(accepted_traces, rejected_traces):
     testing_PosSize = round(len(accepted_traces) * 0.3)
     training_PosSize = len(accepted_traces) - testing_PosSize
@@ -47,10 +47,10 @@ def write_to_file(traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp):
 
 if __name__ == '__main__':
     clean_folder()
-    k, accepted_traces, rejected_traces, BL, SP = import_input("input/PosNegExamples.txt")
-    traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp = split_dataset(accepted_traces, rejected_traces)
-    # # traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp  = import_input("input/traces.txt")
-    #
+    # k, accepted_traces, rejected_traces, BL, SP = import_input("input/PosNegExamples.txt")
+    # traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp = split_dataset(accepted_traces, rejected_traces)
+    traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp  = import_input("input/traces.txt")
+
     write_to_file(traningPosExmp, trainingNegExmp, evalPosExmp, evalNegExamp)
     print(f'..........Training.............')
     print(f'number of Positive Examples: {len(traningPosExmp)}')

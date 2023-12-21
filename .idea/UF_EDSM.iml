@@ -8,5 +8,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="PatternLearner" />
     <orderEntry type="module" module-name="drawingDiagram" />
+    <orderEntry type="module" module-name="GraphsDrawing" />
   </component>
 </module>
