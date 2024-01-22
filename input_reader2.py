@@ -4,7 +4,7 @@ import os, shutil
 version: 3.0
 """
 
-def import_input(input_file):
+def import_input2(input_file):
     trainingPositive = []
     trainingNegative = []
     evaluationPositive = []

@@ -26,7 +26,7 @@ class FSM:
         self.visited = []
         self.pick_next_blue2(self.apta.root)
         # print(f'BLUE_STATES: {self.blue_states}')
-        self.draw()
+        # self.draw()
         # mergable_states is  a list contains all pairs of state that are valid to be merged with their merging scour
         mergable_states=[]
         blue=None
@@ -66,10 +66,10 @@ class FSM:
             # print(f'{blue} cannot be merged with any red_state')
             self.apta.set_color(blue, 'red') # make it red
             self.red_states.append(blue) #addit to red_states list
-            self.draw()
+            # self.draw()
         else:
             ds_with_highest_scour = self.pick_high_scour_pair(mergable_states)
-            # print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
+            print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
             self.merge_sets(ds_with_highest_scour)
             self.draw()
 
@@ -167,15 +167,26 @@ class FSM:
         return True
 
     def compute_scour(self, ds):
+        # merging_scour = 0
+        # states_before_merge = self.apta.G.number_of_nodes()
+        # backup = copy.deepcopy(self.apta)
+        # self.merge_sets(ds)
+        # states_after_merge = self.apta.G.number_of_nodes()
+        # self.apta = backup
+        # if states_before_merge != states_after_merge:
+        #     merging_scour = states_before_merge - states_after_merge -1
+        # return merging_scour
         merging_scour = 0
-        states_before_merge = self.apta.G.number_of_nodes()
-        backup = copy.deepcopy(self.apta)
-        self.merge_sets(ds)
-        states_after_merge = self.apta.G.number_of_nodes()
-        self.apta = backup
-        if states_before_merge != states_after_merge:
-            merging_scour = states_before_merge - states_after_merge -1
-        return merging_scour
+        all_sets = ds.get_sets()
+        for representative, elements in all_sets.items():
+            if len(elements)>1:
+                merging_scour += (len(elements)-1)
+
+        return merging_scour -1
+
+
+
+
 
     def merge_sets(self, ds):
         sets = ds.get_sets()
@@ -298,10 +309,13 @@ class FSM:
             self.apta.add_edge(red, b_child, label)
 
     def draw(self):
+        temp_color = self.apta.G.nodes[self.apta.root]['fillcolor']
+        self.apta.G.nodes[self.apta.root]['fillcolor'] = 'green'
         p = nx.nx_agraph.pygraphviz_layout(self.apta.G, prog='dot')
         p = nx.drawing.nx_pydot.to_pydot(self.apta.G)
         p.write_png(f'output/figure{FSM.figure_num:02d}.png')
         FSM.figure_num+=1
+        self.apta.G.nodes[self.apta.root]['fillcolor'] = temp_color
 
     def compute_classes2(self,ds ,work_to_do):
         add_something_new = False
