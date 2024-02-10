@@ -5,6 +5,29 @@ class DisjointSet:
         self.s2= -1
         self.merging_scour = 0
 
+    # disjointset1 == disjointset2
+    # if both ave the same representative
+    # and the sma e values for each set
+    # values could be stored in different order within the set
+    # example:
+    # ds1={1:[1,3,4], 2:[2,5,6], 7:[7]}
+    # ds2={2:[5,2,6], 1:[3,1,4], 7:[7]}
+    # ds1 == ds2 is True
+    def __eq__(self, other):
+        result = True
+        if self.parent.keys() == other.parent.keys():
+            for key in self.parent.keys():
+                self_set = set(self.get_set(key))
+                other_set = set(other.get_set(key))
+                # if self_set != other_set and len(self_set) == len(other_set):
+                #     result = all(item in other_set for item in self_set)
+                result= self_set == other_set
+                if not result:
+                    return False
+        else:
+            result = False
+        return result
+
     def make_set(self, element):
         # Create a new set with a single element
         self.parent[element] = element

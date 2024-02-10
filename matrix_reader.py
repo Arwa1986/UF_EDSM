@@ -19,7 +19,7 @@ from main import *
 
 
 def read_matrix(fname):
-    print('start')
+    # print('start')
     G = nx.MultiDiGraph()
     f = open(fname)
 
@@ -47,11 +47,11 @@ def read_matrix(fname):
         # G.add_node(to, label=to)
         G.add_node(to, label=to, type=ntype, style='filled', fillcolor=color, shape=shape)
         G.add_edge(frm, to, label=lbl, weight='1')
-        print(frm, to, lbl)
+        # print(frm, to, lbl)
 
     f.close()
 
-    print('done')
+    # print('done')
     return G
 
 
