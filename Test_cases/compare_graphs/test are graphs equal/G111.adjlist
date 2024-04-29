@@ -1,0 +1,9 @@
+0 0 a accepted
+0 1 b
+0 2 c
+0 2 d rejected
+2 1 b
+1 5 c
+1 1 b
+1 0 a accepted
+5 2 c

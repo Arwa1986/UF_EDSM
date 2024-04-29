@@ -69,9 +69,9 @@ class FSM:
             # self.draw()
         else:
             ds_with_highest_scour = self.pick_high_scour_pair(mergable_states)
-            print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
+            # print(f'{ds_with_highest_scour.s1} & {ds_with_highest_scour.s2} has the highest scour : {ds_with_highest_scour.merging_scour}')
             self.merge_sets(ds_with_highest_scour)
-            self.draw()
+            # self.draw()
 
         self.update_red_states()
         self.run_EDSM_learner()
@@ -85,7 +85,7 @@ class FSM:
                 non_red_states = [s for s in all_states if self.apta.G.nodes[s].get('fillcolor') != 'red']
                 for non_red in non_red_states:
                     self.apta.set_color(non_red, 'blue')
-                self.draw()
+                # self.draw()
                 if non_red_states:
                     return non_red_states
     def pick_next_blue2(self, red):
@@ -314,6 +314,15 @@ class FSM:
         p = nx.nx_agraph.pygraphviz_layout(self.apta.G, prog='dot')
         p = nx.drawing.nx_pydot.to_pydot(self.apta.G)
         p.write_png(f'output/figure{FSM.figure_num:02d}.png')
+        FSM.figure_num+=1
+        self.apta.G.nodes[self.apta.root]['fillcolor'] = temp_color
+
+    def draw2(self, outputfile):
+        temp_color = self.apta.G.nodes[self.apta.root]['fillcolor']
+        self.apta.G.nodes[self.apta.root]['fillcolor'] = 'green'
+        p = nx.nx_agraph.pygraphviz_layout(self.apta.G, prog='dot')
+        p = nx.drawing.nx_pydot.to_pydot(self.apta.G)
+        p.write_png(f'output/{outputfile}.png')
         FSM.figure_num+=1
         self.apta.G.nodes[self.apta.root]['fillcolor'] = temp_color
 

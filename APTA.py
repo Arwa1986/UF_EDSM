@@ -38,13 +38,12 @@ class APTA:
     def get_out_edges_asDictionary(self, s):
         edges = {}
         if s in self.G:
-             edges_list = self.G.out_edges(s, keys=True)
-             for e_tuple in edges_list:
-                 frm, to, key = e_tuple[0], e_tuple[1], e_tuple[2]
-                 lbl = self.G.get_edge_data(frm, to, key)["label"]
-                 edges[lbl] = to
+            edges_list = self.G.out_edges(s, keys=True)
+            for e_tuple in edges_list:
+                frm, to, key = e_tuple[0], e_tuple[1], e_tuple[2]
+                lbl = self.G.get_edge_data(frm, to, key)["label"]
+                edges[lbl] = to
         return edges
-
 
     def get_in_edges(self, s):
         if s in self.G:
