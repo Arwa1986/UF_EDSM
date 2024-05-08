@@ -1,0 +1,16 @@
+V0 <V0> - L0 -> V1 <V1>
+V0 <V0> - L1 -> V1 <V1>
+V1 <V1> - L1 -> V3 <V3>
+V3 <V3> - L0 -> V1 <V1>
+V3 <V3> - L1 -> V0 <V0>
+Postive sequences
+[L0, L1, L0, L1, L1]
+[L0, L1, L1, L0]
+[L0, L1, L0, L0]
+[L0, L1, L1, L0, L1, L0]
+[L0, L1, L1, L1, L1]
+Negative sequences
+[L0, L1, L1, L1, L0]
+[L0, L1, L0, L1, L1, L0, L0]
+[L0, L1, L0, L1, L0, L0]
+

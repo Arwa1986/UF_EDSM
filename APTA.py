@@ -115,21 +115,34 @@ class APTA:
         else:
             return -1
 
-    def add_state(self, type="unlabeled"):
+    # prefix-closed traces
+    # a state is either accepted or rejected
+    # all unlabeled states are accepted states
+    def add_state(self, type="accepted"):
         # create a new state with new id and add it to the graph
         if type == "accepted":
             self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray', shape='doublecircle')
-            # self.accepted_nodes[self.id] = self.id
         elif type == "rejected":
             self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray', shape='square')
-            # self.rejected_nodes[self.id] = self.id
-        else:
-            self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray')
 
         # increase id for the next state
         self.id = self.id + 1
         return self.id - 1
 
+    # def add_state(self, type="unlabeled"):
+    #     # create a new state with new id and add it to the graph
+    #     if type == "accepted":
+    #         self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray', shape='doublecircle')
+    #         # self.accepted_nodes[self.id] = self.id
+    #     elif type == "rejected":
+    #         self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray', shape='square')
+    #         # self.rejected_nodes[self.id] = self.id
+    #     else:
+    #         self.G.add_node(self.id, label=self.id, type=type, style='filled', fillcolor='gray')
+    #
+    #     # increase id for the next state
+    #     self.id = self.id + 1
+    #     return self.id - 1
     def get_state_type(self, s):
         if s in self.G:
             return self.G.nodes[s]["type"]
