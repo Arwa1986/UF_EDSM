@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/PycharmProjects/EDSMandPattrens/.idea/EDSMandPattrens.iml" filepath="$USER_HOME$/PycharmProjects/EDSMandPattrens/.idea/EDSMandPattrens.iml" />
       <module fileurl="file://$USER_HOME$/PycharmProjects/GraphsDrawing/.idea/GraphsDrawing.iml" filepath="$USER_HOME$/PycharmProjects/GraphsDrawing/.idea/GraphsDrawing.iml" />
       <module fileurl="file://$PROJECT_DIR$/../PatternLearner/.idea/PatternLearner.iml" filepath="$PROJECT_DIR$/../PatternLearner/.idea/PatternLearner.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/UF_EDSM.iml" filepath="$PROJECT_DIR$/.idea/UF_EDSM.iml" />

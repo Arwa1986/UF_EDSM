@@ -9,5 +9,6 @@
     <orderEntry type="module" module-name="PatternLearner" />
     <orderEntry type="module" module-name="drawingDiagram" />
     <orderEntry type="module" module-name="GraphsDrawing" />
+    <orderEntry type="module" module-name="EDSMandPattrens" />
   </component>
 </module>

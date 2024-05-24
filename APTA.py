@@ -84,7 +84,7 @@ class APTA:
 
             for node in trace:
                 if x == -1:
-                    break;
+                    break
                 self.frm = x
                 x = self.get_successor(x, trace[i])
                 if i==len(trace)-1:
