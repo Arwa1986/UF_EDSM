@@ -18,8 +18,8 @@ def start_learning(traningPosExmp, trainingNegExmp):
 if __name__ == '__main__':
 
     clean_folder()
-    input_folder = 'input-10states'
-    counter = 1
+    input_folder = 'input'
+    counter = 24
     # inputfile = "input/PosNegExamples.txt"
 
     for file_name in os.listdir(input_folder):
@@ -37,7 +37,7 @@ if __name__ == '__main__':
         data = [
             [len(traningPosExmp), len(trainingNegExmp), len(evalPosExmp), len(evalNegExamp), true_positive, true_negative,
              false_positive, false_negative, precision, recall, F_measure, Accuracy]]
-        file_path = 'EDSM10StatesData.csv'
+        file_path = 'data.csv'
         # Write data to CSV file
         with open(file_path, mode='a', newline='') as file:
             writer = csv.writer(file)

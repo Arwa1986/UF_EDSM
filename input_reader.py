@@ -184,7 +184,7 @@ def clean_folder(folder = 'output'):
             print('Failed to delete %s. Reason: %s' % (file_path, e))
 
 if __name__ == '__main__':
-    clean_folder()
+    clean_folder('input')
     input_folder = 'fromEclips'
     counter = 1
     # Process each file in the input folder
@@ -194,4 +194,4 @@ if __name__ == '__main__':
 
         # Process the file
         prepare_data(input_file_path, counter)
-        counter+=10
+        counter+=2

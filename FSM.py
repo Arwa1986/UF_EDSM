@@ -184,10 +184,6 @@ class FSM:
 
         return merging_scour -1
 
-
-
-
-
     def merge_sets(self, ds):
         sets = ds.get_sets()
         for set in sets.items():
